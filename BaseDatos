@@ -1,0 +1,44 @@
+-----------------------------------------------------------------------
+--SCRIPT PARA GENERAR LA BASE DE DATOS Angulo_Clarke
+-----------------------------------------------------------------------
+use master
+
+--creacion de la base de datos
+create database AnguloClarke
+
+use AnguloClarke
+
+create table paciente
+(id_paciente  int primary key, 
+nombre    char(40) not null,     
+edad    int,
+genero    char(20) not null,
+peso float,         
+estatura float, 
+)
+
+alter table paciente ADD CONSTRAINT CK_Genero CHECK (genero IN ('Masculino', 'Femenino'))
+
+create table imagen
+(id_imagen int primary key,
+id_paciente int references paciente(id_paciente),
+imgDerecho char(200) not null,
+imgIzquierdo char(200) not null,
+)
+
+
+create table calculo_anguloC
+(id_calculo int primary key,
+id_imagen int references imagen(id_imagen),
+anguloDerecho float,
+anguloIzquierdo float,
+)
+
+create table diagnostico
+(id_diagnostico int primary key,
+id_calculo int references calculo_anguloC(id_calculo),
+resultadoDerecho char(20) not null,
+resultadoIzquierdo char(20) not null,
+CONSTRAINT CK_resultadoDerecho CHECK (resultadoDerecho in ('Normal','Plano')),
+CONSTRAINT CK_resultadoIzquierdo CHECK (resultadoIzquierdo in ('Normal','Plano'))
+)
